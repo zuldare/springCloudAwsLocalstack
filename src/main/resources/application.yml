@@ -1,0 +1,30 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: awslocalstack
+
+  docker:
+    compose:
+      enabled: true
+      file: compose.yaml
+
+  cloud:
+    aws:
+      s3:
+        endpoint: http://s3.localhost.localstack.cloud:4566
+        region: eu-central-1
+      credentials:
+        access-key: none
+        secret-key: none
+      region:
+        static: eu-central-1
+
+logging:
+  level:
+    web: DEBUG
+
+
+aws:
+  bucket: mybucket
