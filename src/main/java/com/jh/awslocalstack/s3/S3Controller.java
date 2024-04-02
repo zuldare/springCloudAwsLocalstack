@@ -1,7 +1,12 @@
 package com.jh.awslocalstack.s3;
 
-import io.awspring.cloud.s3.S3Template;
-import org.springframework.beans.factory.annotation.Value;
+
+import com.jh.awslocalstack.model.CustomUser;
+import com.jh.awslocalstack.service.CustomS3Service;
+import com.jh.awslocalstack.service.CustomSqsService;
+import io.awspring.cloud.sqs.annotation.SqsListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,23 +16,30 @@ import java.util.List;
 
 @RestController
 public class S3Controller {
-    private final S3Template s3Template;
 
-    @Value("${aws.bucket}")
-    private String bucketName;
+    private static final Logger log = LoggerFactory.getLogger(S3Controller.class);
 
-    public S3Controller (S3Template s3Template) {
-        this.s3Template = s3Template;
+    private final CustomS3Service s3Service;
+    private final CustomSqsService sqsService;
+
+    public S3Controller (CustomS3Service s3Service, CustomSqsService sqsService) {
+        this.s3Service = s3Service;
+        this.sqsService = sqsService;
     }
+
+    @PostMapping("/sendMessage")
+    public ResponseEntity<String> sendMessage() {
+        sqsService.sendMessage();
+        return ResponseEntity.ok("Message sent to queue");
+    }
+
     @GetMapping("/buckets/template")
     public List<String> getBucketsWithTemplate(){
-        return s3Template.listObjects(bucketName, "").stream()
-                .map(s3Resource -> s3Resource.getFilename())
-                .toList();
+        return s3Service.getBucketsWithTemplate();
     }
     @PostMapping("/buckets")
     public ResponseEntity<String> uploadFile(@RequestParam MultipartFile file) throws IOException {
-        s3Template.upload(bucketName, file.getOriginalFilename(), file.getInputStream());
+        s3Service.uploadFile(file);
         return ResponseEntity.ok("File uploaded" + file.getOriginalFilename() );
     }
 }

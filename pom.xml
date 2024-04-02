@@ -60,6 +60,13 @@
 		</dependency>
 
 		<!-- AWS Dependencies -->
+
+		<!-- needed in order to provide credentials and region -->
+		<dependency>
+			<groupId>io.awspring.cloud</groupId>
+			<artifactId>spring-cloud-aws-starter</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>io.awspring.cloud</groupId>
 			<artifactId>spring-cloud-aws-starter-s3</artifactId>

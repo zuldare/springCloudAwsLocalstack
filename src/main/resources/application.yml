@@ -13,19 +13,16 @@ spring:
   cloud:
     aws:
       s3:
-        endpoint: http://s3.localhost.localstack.cloud:4566
+        endpoint: http://localhost:4566
         region: eu-central-1
       credentials:
-        access-key: none
-        secret-key: none
+        access-key: test
+        secret-key: test
       region:
         static: eu-central-1
-
-logging:
-  level:
-    web: DEBUG
-
+      sqs:
+        endpoint: http://localhost:4566
 
 aws:
   bucket: mybucket
-  test-queue: http://sqs.eu-central-1.localhost.localstack.cloud:4566/000000000000/test-queue
+  queue: my-queue
