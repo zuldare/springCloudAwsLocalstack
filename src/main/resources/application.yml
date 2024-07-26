@@ -16,8 +16,8 @@ spring:
         endpoint: http://localhost:4566
         region: eu-central-1
       credentials:
-        access-key: test
-        secret-key: test
+        access-key: none
+        secret-key: none
       region:
         static: eu-central-1
       sqs:
